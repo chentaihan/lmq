@@ -1,0 +1,12 @@
+<seelog type="asynctimer" asyncinterval="1000" minlevel="trace">
+    <outputs formatid="common">
+        <rollingfile type="date" filename="./log/lock.log" datepattern="20060102" maxrolls="120"/>
+        <console />
+        <filter levels="warn,error,critical">
+            <rollingfile type="date" filename="./log/lock.wf.log" datepattern="20060102" maxrolls="120"/>
+        </filter>
+    </outputs>
+    <formats>
+        <format id="common" format="%Date/%Time [%Level] %RelFile %Func %Line %Msg%n"/>
+    </formats>
+</seelog>
