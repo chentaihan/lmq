@@ -2,9 +2,9 @@ package lmq
 
 import (
 	"fmt"
+	"encoding/json"
 
 	"lmq/util"
-	"encoding/json"
 	"lmq/container"
 	"lmq/util/logger"
 )
@@ -18,8 +18,6 @@ var PlatformList map[string]*Platform
 type Platform struct{
 	Name string
 	ModuleList container.Array
-	UsedQueueCount int
-	MaxQueueCount int
 }
 
 type PlatformItem struct{
@@ -51,7 +49,6 @@ func AddPlatform(pf PlatformItem) bool{
 	if !ok {
 		PlatformList[pf.Platform] = NewPlatform(pf.Platform)
 		platform = PlatformList[pf.Platform]
-		platform.MaxQueueCount = MaxQueueCount
 	}
 	if index := platform.ModuleList.Find(pf.Module); index == -1{
 		platform.ModuleList.Append(pf.Module)

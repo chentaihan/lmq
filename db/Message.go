@@ -2,6 +2,7 @@ package db
 
 import (
 	"encoding/json"
+
 	"lmq/util"
 	"lmq/util/logger"
 )
@@ -32,6 +33,5 @@ func SaveMessage(msg *Message) int64{
 	}else{
 		logger.Logger.Errorf("SaveMessage failed %s", bytes)
 	}
-
 	return -1
 }
