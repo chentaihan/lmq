@@ -1,7 +1,6 @@
 package db
 
 import(
-	"time"
 	"encoding/json"
 	"fmt"
 
@@ -33,26 +32,13 @@ func InitConfig(){
 		dbConfig.indexFileName[i] = fmt.Sprintf(IndexFileName, i)
 		dbConfig.messageFileName[i] = fmt.Sprintf(MessageFileName, i)
 	}
-	startSaveTimer()
 }
 
-func startSaveTimer() {
-	go func(){
-		t1 := time.NewTimer(time.Second * 1)
-		for {
-			select {
-			case <-t1.C:
-				dbConfig.SaveConfig()
-				t1.Reset(time.Second * 1)
-			}
-		}
-	}()
-}
-
-func (dbConfig *DBConfig) SaveConfig(){
+func (dbConfig *DBConfig) Save() bool{
 	if bytes, err := json.Marshal(dbConfig); err == nil{
-		util.WriteBytesCover(DBConf, bytes)
+		return util.WriteBytesCover(DBConf, bytes)
 	}
+	return false
 }
 
 func getFileIndex(index int64) int64{

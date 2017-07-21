@@ -9,6 +9,8 @@ import (
 	"lmq/lmq"
 	"lmq/util"
 	"lmq/db"
+	"lmq/api"
+	"net/http"
 )
 
 type Person struct{
@@ -61,6 +63,9 @@ func test(){
 
 func main() {
 	db.InitDB();
-	db.IndexTest();
-	time.Sleep(time.Second * 3)
+	fmt.Println("server start...")
+	server := api.NewServer()
+	server.InitRouter()
+	http.ListenAndServe(":8001", server.Router)
+	fmt.Println("server start OK")
 }

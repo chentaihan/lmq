@@ -33,23 +33,12 @@ type IncrementId struct {
 	lock sync.RWMutex
 }
 
-var writeIndexChan chan *Index
 var incrementId IncrementId
 var indexMap *container.SyncMap
 
 func InitIndex() {
 	incrementId.id = dbConfig.IdIndex
 	indexMap = container.NewSyncMap()
-	writeIndexChan = make(chan *Index, 10)
-	go func() {
-		for {
-			select {
-			case index := <-writeIndexChan:
-				saveIndex(index)
-			}
-		}
-		close(writeIndexChan)
-	}()
 }
 
 func getIndex() int64 {
@@ -60,20 +49,13 @@ func getIndex() int64 {
 
 func increment() int64 {
 	incrementId.lock.Lock()
-	incrementId.lock.Unlock()
-	if incrementId.id >= MaxRecordCount {
-		incrementId.id = 0
-	}
+	defer incrementId.lock.Unlock()
 	incrementId.id++
 	dbConfig.IdIndex = incrementId.id
 	return incrementId.id
 }
 
-func SaveIndex(index *Index) {
-	writeIndexChan<- index
-}
-
-func saveIndex(index *Index) {
+func SaveIndex(index *Index) bool{
 	buf := make([]byte, IndexLength)
 	strBuf, _ := json.Marshal(*index)
 	for i := 0; i < len(strBuf); i++ {
@@ -83,23 +65,23 @@ func saveIndex(index *Index) {
 	buf[IndexLength-1] ='\n'
 	offset := (index.Index - 1) * IndexLength
 	indexMap.Add(index.Index, index)
-	util.WriteFileOffset(dbConfig.GetIndexFileName(index.Index), offset, buf)
-}
-
-func getKey(index int64) int64{
-	return index;
+	isSuccess := util.WriteFileOffset(dbConfig.GetIndexFileName(index.Index), offset, buf)
+	if isSuccess {
+		isSuccess = dbConfig.Save()
+	}else{
+		logger.Logger.Errorf("SaveIndex failed %s", buf)
+	}
+	return isSuccess
 }
 
 func deleteIndex(index int64, nameIndex uint){
 	logger.Logger.Tracef("deleteIndex id=%d, nameIndex=%d", index, nameIndex)
-	key := getKey(index)
-	indexMap.Delete(key)
+	indexMap.Delete(index)
 }
 
 func GetIndex(id int64, nameIndex uint) *Index {
 	logger.Logger.Tracef("GetIndexInfo id=%d, nameIndex=%d", id, nameIndex)
-	key := getKey(id)
-	if idxInfo := indexMap.Get(key); idxInfo != nil{
+	if idxInfo := indexMap.Get(id); idxInfo != nil{
 		ret, _ := idxInfo.(*Index)
 		return ret
 	}
@@ -118,7 +100,7 @@ func GetIndex(id int64, nameIndex uint) *Index {
 		logger.Logger.Errorf("get from database failed %d", id)
 		return nil
 	}
-	indexMap.Add(key, indexInfo)
+	indexMap.Add(id, indexInfo)
 	return &indexInfo;
 }
 

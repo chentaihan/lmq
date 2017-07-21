@@ -39,14 +39,14 @@ func WriteString(fileName, content string) int {
 	return count
 }
 
-func WriteBytes(fileName string, content []byte) int {
+func WriteBytes(fileName string, content []byte) bool {
 	fout, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE, 0666)
 	defer fout.Close()
 	if err != nil {
-		return 0
+		return false
 	}
 	count, _ := fout.Write(content)
-	return count
+	return count == len(content)
 }
 
 func ReadString(fileName string) (string, error) {
@@ -58,7 +58,7 @@ func ReadFile(fileName string) ([]byte, error) {
 	return ioutil.ReadFile(fileName)
 }
 
-func WriteFileOffset(fileName string, offset int64, content []byte) int{
+func WriteFileOffset(fileName string, offset int64, content []byte) bool{
 	fout, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE, 0666)
 	defer fout.Close()
 	if err != nil {
@@ -66,7 +66,7 @@ func WriteFileOffset(fileName string, offset int64, content []byte) int{
 	}
 	fout.Seek(offset, 0)
 	count, _ := fout.Write(content)
-	return count
+	return count == len(content)
 }
 
 func ReadFileOffset(fileName string, offset int64, length int64) ([]byte, error){
