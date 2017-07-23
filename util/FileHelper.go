@@ -7,6 +7,8 @@ import (
 	"os"
 	"io/ioutil"
 	"strings"
+
+	"lmq/util/logger"
 )
 
 func IsExist(fileName string) bool {
@@ -19,10 +21,22 @@ func IsExist(fileName string) bool {
 	return true
 }
 
+func CreateFile(fileName string) bool{
+	file, err := os.Create(fileName);
+	if err != nil {
+		logger.Logger.Errorf("CreateFile %s failed, error=%s", fileName, err.Error())
+		return false
+	}
+	file.Close()
+	return true
+}
+
 func WriteBytesCover(fileName string, content []byte) bool {
 	fout, err := os.OpenFile(fileName, os.O_CREATE, 0666)
+	fout.Truncate(int64(len(content)))
 	defer fout.Close()
 	if err != nil {
+		logger.Logger.Errorf("WriteBytesCover %s failed, error=%s", fileName, err.Error())
 		return false
 	}
 	_, err = fout.Write(content)
@@ -33,6 +47,7 @@ func WriteString(fileName, content string) int {
 	fout, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE, 0666)
 	defer fout.Close()
 	if err != nil {
+		logger.Logger.Errorf("WriteString %s failed, error=%s", fileName, err.Error())
 		return 0
 	}
 	count, _ := fout.WriteString(content)
@@ -43,6 +58,7 @@ func WriteBytes(fileName string, content []byte) bool {
 	fout, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE, 0666)
 	defer fout.Close()
 	if err != nil {
+		logger.Logger.Errorf("WriteBytes %s failed, error=%s", fileName, err.Error())
 		return false
 	}
 	count, _ := fout.Write(content)
@@ -62,7 +78,8 @@ func WriteFileOffset(fileName string, offset int64, content []byte) bool{
 	fout, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE, 0666)
 	defer fout.Close()
 	if err != nil {
-		return 0
+		logger.Logger.Errorf("WriteFileOffset %s failed, error=%s", fileName, err.Error())
+		return false
 	}
 	fout.Seek(offset, 0)
 	count, _ := fout.Write(content)
@@ -72,12 +89,12 @@ func WriteFileOffset(fileName string, offset int64, content []byte) bool{
 func ReadFileOffset(fileName string, offset int64, length int64) ([]byte, error){
 	f, err := os.Open(fileName)
 	if err != nil {
+		logger.Logger.Errorf("WriteFileOffset %s failed, error=%s", fileName, err.Error())
 		return nil, err
 	}
 	defer f.Close()
 	var n int64 = 0
 	if fi, err := f.Stat(); err == nil {
-		// Don't preallocate a huge buffer, just in case.
 		if size := fi.Size(); size < 1e9 {
 			n = size
 		}
@@ -216,7 +233,5 @@ func FileTest() {
 	// DownloadFile("http://www.baidu.com", "baidu.txt")
 
 	RecursionDir("E:\\OpenSource\\go\\Docker")
-
-
 }
 

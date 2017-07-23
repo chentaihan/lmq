@@ -2,66 +2,82 @@ package lmq
 
 import (
 	"fmt"
-	"encoding/json"
+	"io/ioutil"
+	"strings"
 
 	"lmq/util"
 	"lmq/container"
 	"lmq/util/logger"
+	"encoding/json"
 )
 
 const (
 	MaxQueueCount = 100
+	PlatformPath = "./data/platform/"
 )
 
-var PlatformList map[string]*Platform
+var platformManager PlatformManager
 
-type Platform struct{
-	Name string
-	ModuleList container.Array
+type PlatformManager struct{
+	PlatformList container.Array
 }
 
-type PlatformItem struct{
-	Platform string
-	Module string
+func initPlatform(){
+	platformManager = PlatformManager{PlatformList: container.NewArray()}
+	util.MkDir(PlatformPath)
+	loadPlatform()
+	jsonStr,_ := json.Marshal(platformManager.PlatformList)
+	logger.Logger.Trace("InitPlatformManager success content="+string(jsonStr))
 }
 
-func NewPlatform(name string) *Platform{
-	return &Platform{Name : name}
-}
-
-func LoadPlatform() bool{
-	if PlatformList == nil {
-		PlatformList = make(map[string]*Platform)
-	}
-	if bytes := util.LoadJson(util.PlatformConf); bytes != nil{
-		var platforms []PlatformItem
-		json.Unmarshal(bytes, &platforms)
-		for _, pf := range platforms{
-			AddPlatform(pf)
+func loadPlatform(){
+	dirList, _ := ioutil.ReadDir(PlatformPath)
+	for _, file := range dirList{
+		if !file.IsDir() {
+			fileName := file.Name()
+			if strings.HasSuffix(fileName, ".json"){
+				platformManager.PlatformList.Append(fileName[0:len(fileName)-5])
+			}
 		}
-		return true
+	}
+}
+
+func AddPlatform(name string) bool{
+	if !ExistPlatform(name){
+		platformManager.PlatformList.Append(name)
+		isOK := true
+		for i := 0; i < 3; i++{
+			isOK := util.CreateFile(GetPlatformPath(name))
+			if isOK {
+				break
+			}
+		}
+		if !isOK {
+			logger.Logger.Trace("AddPlatform failed platformName="+ name)
+		}
+		return isOK
 	}
 	return false
 }
 
-func AddPlatform(pf PlatformItem) bool{
-	platform, ok := PlatformList[pf.Platform];
-	if !ok {
-		PlatformList[pf.Platform] = NewPlatform(pf.Platform)
-		platform = PlatformList[pf.Platform]
-	}
-	if index := platform.ModuleList.Find(pf.Module); index == -1{
-		platform.ModuleList.Append(pf.Module)
-		return true
-	}else{
-		logger.Logger.Errorf("%s %s is exist", pf.Platform, pf.Module)
-		return  false
-	}
+func GetPlatformPath(platform string) string{
+	return fmt.Sprintf("%s%s.json", PlatformPath, platform)
 }
 
-func OutPutPlatformList(){
-	str, err := json.Marshal(PlatformList);
-	if err == nil{
-		fmt.Println(string(str))
+func ExistPlatform(name string) bool{
+	index := platformManager.PlatformList.Find(name);
+	return index >= 0
+}
+
+func DeletePlatform(name string) bool{
+	if item := platformManager.PlatformList.DeleteItem(name); item != nil{
+		filePath := GetPlatformPath(name)
+		return util.Remove(filePath)
 	}
+	return false
+}
+
+func SavePlatform(name string, content []byte) bool{
+	filePath := GetPlatformPath(name)
+	return util.WriteBytesCover(filePath, content)
 }

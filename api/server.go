@@ -30,6 +30,9 @@ func NewServer() *Server{
 
 func (s *Server) InitRouter() {
 	routers := []router.Router{
+		server.NewHomeRouter(),
+		server.NewPlatformRouter(),
+		server.NewModuleRouter(),
 		server.NewMessageRouter(),
 	}
 	s.routers = append(s.routers, routers...)

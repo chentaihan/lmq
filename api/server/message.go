@@ -7,6 +7,7 @@ import (
 	"lmq/api/router"
 	"encoding/json"
 	"fmt"
+	"lmq/lmq"
 )
 
 type messageRouter struct {
@@ -37,7 +38,7 @@ func SayHello(w http.ResponseWriter, req *http.Request) {
 
 func AddMessage(w http.ResponseWriter, req *http.Request) {
 	req.ParseForm()
-	message := new(db.Message)
+	message := new(lmq.Message)
 	message.Platform = req.FormValue("platform")
 	message.Module = req.FormValue("module")
 	message.Tag = req.FormValue("tag")
@@ -47,20 +48,26 @@ func AddMessage(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(string(msgStr))
 	retCode := http.StatusOK
 	m := make(map[string]interface{})
+	var errno int
 	if len(message.Platform) == 0 || len(message.Module) == 0 || len(message.Url) == 0{
 		fmt.Println("404 bad request")
 		retCode = http.StatusBadRequest
-		m["errno"] = util.HTTP_PARAM_ERROR
-		m["errmsg"] = util.GetCodeString(util.HTTP_PARAM_ERROR)
+		errno = util.HTTP_PARAM_ERROR
 	}else{
-		fmt.Println("start add message")
-		msgId := db.SaveMessage(message)
-		m["id"] = msgId
-		if msgId > 0 {
-			m["errno"] = util.HTTP_SUCCESS
+		ok := lmq.ExistModule(message.Platform, message.Module)
+		if ok {
+			msgId := db.SaveMessage(message)
+			m["id"] = msgId
+			if msgId > 0 {
+				errno = util.HTTP_SUCCESS
+			}else{
+				retCode = http.StatusInternalServerError
+				errno = util.HTTP_SAVEMESSAGE_FAILED
+			}
 		}else{
-			m["errno"] = util.HTTP_FAILED
+			errno = util.HTTP_PARAM_MODULE_NOT_EXIST
 		}
 	}
+	m["errmsg"] = util.GetCodeString(errno)
 	SendHttpResponse(w, m, retCode)
 }

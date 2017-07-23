@@ -22,6 +22,11 @@ func (arr *Array) AppendRange(val []interface{}){
 	*arr = append(*arr, val...)
 }
 
+func (arr *Array) DeleteItem(item interface{}) interface{}{
+	index := arr.Find(item)
+	return arr.Delete(index)
+}
+
 func (arr *Array) Delete(index int) interface{}{
 	if index < 0 || index >= arr.Size() {
 		return nil

@@ -3,20 +3,12 @@ package db
 import (
 	"encoding/json"
 
+	"lmq/lmq"
 	"lmq/util"
 	"lmq/util/logger"
 )
 
-type Message struct{
-	ID int64
-	Platform string
-	Module string
-	Tag string
-	Url string
-	Params string
-}
-
-func SaveMessage(msg *Message) int64{
+func SaveMessage(msg *lmq.Message) int64{
 	indexInfo := NewIndex()
 	msg.ID = indexInfo.Index
 	bytes, _ := json.Marshal(msg)
