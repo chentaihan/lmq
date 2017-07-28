@@ -1,25 +1,25 @@
 <component name="libraryTable">
   <library name="GOPATH &lt;lmq&gt;">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../oais-master" />
-      <root url="file://$PROJECT_DIR$/../skiplist-master" />
-      <root url="file://$PROJECT_DIR$/../go-zookeeper" />
-      <root url="file://$PROJECT_DIR$/../lmq-temp" />
+      <root url="file://$PROJECT_DIR$/../mysql" />
+      <root url="file://$PROJECT_DIR$/../docker" />
       <root url="file://$PROJECT_DIR$/../github.com" />
-      <root url="file://$PROJECT_DIR$/../go-master" />
-      <root url="file://$PROJECT_DIR$/../seelog" />
+      <root url="file://$PROJECT_DIR$/../goTest2" />
+      <root url="file://$PROJECT_DIR$/../strings" />
       <root url="file://$PROJECT_DIR$/../GoTest" />
+      <root url="file://$PROJECT_DIR$/../golang.org" />
+      <root url="file://$PROJECT_DIR$/../skiplist-master" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="file://$PROJECT_DIR$/../oais-master" />
-      <root url="file://$PROJECT_DIR$/../skiplist-master" />
-      <root url="file://$PROJECT_DIR$/../go-zookeeper" />
-      <root url="file://$PROJECT_DIR$/../lmq-temp" />
+      <root url="file://$PROJECT_DIR$/../mysql" />
+      <root url="file://$PROJECT_DIR$/../docker" />
       <root url="file://$PROJECT_DIR$/../github.com" />
-      <root url="file://$PROJECT_DIR$/../go-master" />
-      <root url="file://$PROJECT_DIR$/../seelog" />
+      <root url="file://$PROJECT_DIR$/../goTest2" />
+      <root url="file://$PROJECT_DIR$/../strings" />
       <root url="file://$PROJECT_DIR$/../GoTest" />
+      <root url="file://$PROJECT_DIR$/../golang.org" />
+      <root url="file://$PROJECT_DIR$/../skiplist-master" />
     </SOURCES>
     <excluded>
       <root url="file://$PROJECT_DIR$" />

@@ -108,6 +108,16 @@ func GetModuleList() map[string]([]*Module){
 	return moduleManager.ModuleList
 }
 
+func AddQueue(msg *Message) bool{
+	moduleList := moduleManager.ModuleList[msg.Platform]
+	for _, module := range moduleList{
+		if module.Name == msg.Module {
+			return module.queue.Put(msg);
+		}
+	}
+	return false
+}
+
 func TestModule(){
 	AddModule("orcp", "module1")
 	AddModule("orcp", "module2")

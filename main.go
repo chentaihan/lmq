@@ -6,9 +6,11 @@ import (
 	"lmq/lmq"
 	"lmq/db"
 	"lmq/util/logger"
+	"lmq/event"
 )
 
 func main() {
+	event.TestEvent()
 	lmq.InitModule()
 	db.InitDB();
 	logger.Logger.Trace("server start...")

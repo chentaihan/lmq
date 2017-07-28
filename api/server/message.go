@@ -20,7 +20,6 @@ func NewMessageRouter() router.Router {
 	return r
 }
 
-// Routes returns the available routers to the checkpoint controller
 func (r *messageRouter) Routes() []router.Route {
 	return r.routes
 }
@@ -60,6 +59,7 @@ func AddMessage(w http.ResponseWriter, req *http.Request) {
 			m["id"] = msgId
 			if msgId > 0 {
 				errno = util.HTTP_SUCCESS
+				lmq.AddQueue(message)
 			}else{
 				retCode = http.StatusInternalServerError
 				errno = util.HTTP_SAVEMESSAGE_FAILED
