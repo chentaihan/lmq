@@ -1,21 +1,40 @@
 package main
 
 import (
+	"fmt"
+
 	"lmq/api"
 	"net/http"
 	"lmq/lmq"
 	"lmq/db"
 	"lmq/util/logger"
 	"lmq/event"
+	"lmq/container"
 )
 
 func main() {
-	event.TestEvent()
-	lmq.InitModule()
 	db.InitDB();
-	logger.Logger.Trace("server start...")
+	lmq.InitModule()
+	logger.Logger.Trace("init success ...")
+	startWorker()
 	server := api.NewServer()
 	server.InitRouter()
 	http.ListenAndServe(":8001", server.Router)
 	logger.Logger.Trace("server start OK")
+}
+
+func startWorker(){
+	moduleList := lmq.GetModuleList()
+	moduleNameList := make([]string, len(moduleList))
+	esQueueList := make([](*container.CQueue), len(moduleList))
+	for _, value := range moduleList {
+		for _, module := range value {
+			name := fmt.Sprintf("%s_%s", module.Platform, module.Name)
+			moduleNameList = append(moduleNameList, name)
+			esQueueList = append(esQueueList, module.Queue)
+		}
+	}
+	event.InitEventCenter(moduleNameList, esQueueList)
+	event.StartEventCenter()
+	logger.Logger.Trace("startWorker OK")
 }

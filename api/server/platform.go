@@ -6,6 +6,7 @@ import (
 	"lmq/util"
 	"lmq/api/router"
 	"lmq/lmq"
+	"lmq/util/logger"
 )
 
 type platformRouter struct {
@@ -33,11 +34,12 @@ func (r *platformRouter) initRoutes() {
 func AddPlatform(w http.ResponseWriter, req *http.Request) {
 	req.ParseForm()
 	platform := req.FormValue("platform")
-	ok := lmq.AddPlatform(platform)
+	isOK := lmq.AddPlatform(platform)
+	logger.Logger.Tracef("AddPlatform ret=%d",isOK)
 	m := make(map[string]interface{})
 	var errno int
 	var retCode int
-	if ok {
+	if isOK == true {
 		retCode = http.StatusOK
 		errno = util.HTTP_SUCCESS
 	}else{

@@ -12,18 +12,17 @@ import (
 )
 
 const (
-	MaxQueueCount = 100
 	PlatformPath = "./data/platform/"
 )
 
-var platformManager PlatformManager
+var platformManager *PlatformManager
 
 type PlatformManager struct{
 	PlatformList container.Array
 }
 
 func initPlatform(){
-	platformManager = PlatformManager{PlatformList: container.NewArray()}
+	platformManager = &PlatformManager{PlatformList: container.NewArray()}
 	util.MkDir(PlatformPath)
 	loadPlatform()
 	jsonStr,_ := json.Marshal(platformManager.PlatformList)
@@ -47,14 +46,12 @@ func AddPlatform(name string) bool{
 		platformManager.PlatformList.Append(name)
 		isOK := true
 		for i := 0; i < 3; i++{
-			isOK := util.CreateFile(GetPlatformPath(name))
+			isOK = util.CreateFile(GetPlatformPath(name))
 			if isOK {
 				break
 			}
 		}
-		if !isOK {
-			logger.Logger.Trace("AddPlatform failed platformName="+ name)
-		}
+		logger.Logger.Tracef("AddPlatform failed platformName=%s, isOK=%d", name, isOK)
 		return isOK
 	}
 	return false

@@ -1,10 +1,10 @@
 package api
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
 	"lmq/api/server"
 	"lmq/api/router"
+	"fmt"
 )
 
 const versionMatcher = "/v{version:[0-9.]+}"

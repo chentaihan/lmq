@@ -1,13 +1,16 @@
 package server
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
+
 	"lmq/util"
 	"lmq/db"
 	"lmq/api/router"
-	"encoding/json"
-	"fmt"
 	"lmq/lmq"
+	"lmq/event"
+	"lmq/util/logger"
 )
 
 type messageRouter struct {
@@ -27,29 +30,23 @@ func (r *messageRouter) Routes() []router.Route {
 func (r *messageRouter) initRoutes() {
 	r.routes = []router.Route{
 		router.NewGetRoute("/addmessage", AddMessage),
-		router.NewGetRoute("/hello", SayHello),
 	}
-}
-
-func SayHello(w http.ResponseWriter, req *http.Request) {
-	w.Write([]byte("Hello"))
 }
 
 func AddMessage(w http.ResponseWriter, req *http.Request) {
 	req.ParseForm()
-	message := new(lmq.Message)
+	message := lmq.NewMessage()
 	message.Platform = req.FormValue("platform")
 	message.Module = req.FormValue("module")
 	message.Tag = req.FormValue("tag")
 	message.Url = req.FormValue("url")
 	message.Params = req.FormValue("params")
 	msgStr,_ := json.Marshal(message)
-	fmt.Println(string(msgStr))
+	logger.Logger.Tracef("AddMessage content=%s", string(msgStr))
 	retCode := http.StatusOK
 	m := make(map[string]interface{})
 	var errno int
 	if len(message.Platform) == 0 || len(message.Module) == 0 || len(message.Url) == 0{
-		fmt.Println("404 bad request")
 		retCode = http.StatusBadRequest
 		errno = util.HTTP_PARAM_ERROR
 	}else{
@@ -58,8 +55,14 @@ func AddMessage(w http.ResponseWriter, req *http.Request) {
 			msgId := db.SaveMessage(message)
 			m["id"] = msgId
 			if msgId > 0 {
+				logger.Logger.Tracef("AddMessage SaveMessage success msgId=%d", msgId)
 				errno = util.HTTP_SUCCESS
-				lmq.AddQueue(message)
+				if ok = lmq.AddMessageQueue(message); ok{
+					queueName := fmt.Sprintf("%s_%s", message.Platform, message.Module)
+					event.SendSignal(queueName, event.EVENT_TYPE_ADD_MESSAGE)
+				}else{
+					logger.Logger.Errorf("AddMessage AddQueue failed msgId=%d", msgId)
+				}
 			}else{
 				retCode = http.StatusInternalServerError
 				errno = util.HTTP_SAVEMESSAGE_FAILED

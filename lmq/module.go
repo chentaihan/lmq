@@ -11,12 +11,8 @@ import (
 
 type Module struct{
 	Platform string
-	Name string
-	queue *container.EsQueue
-}
-
-func (m *Module) Queue() *container.EsQueue{
-	return m.queue
+	Name     string
+	Queue    *container.CQueue
 }
 
 var moduleManager ModuleManager
@@ -45,6 +41,8 @@ func loadModule(){
 		}
 		moduleManager.ModuleList[pform] = list
 	}
+	str,_ := json.Marshal(moduleManager.ModuleList)
+	logger.Logger.Trace(string(str))
 }
 
 func AddModule(platform, module string) bool{
@@ -53,7 +51,7 @@ func AddModule(platform, module string) bool{
 		moduleManager.ModuleList[platform] = make([]*Module,0)
 	}
 	if !ExistModule(platform,module){
-		item := &Module{Platform:platform, Name:module, queue:container.NewEsQueue(4)}
+		item := &Module{Platform:platform, Name:module, Queue:container.NewCQueue()}
 		moduleManager.ModuleList[platform] = append(moduleManager.ModuleList[platform],item)
 		return SaveModule(platform, moduleManager.ModuleList[platform])
 	}
@@ -108,11 +106,13 @@ func GetModuleList() map[string]([]*Module){
 	return moduleManager.ModuleList
 }
 
-func AddQueue(msg *Message) bool{
+func AddMessageQueue(msg *Message) bool{
 	moduleList := moduleManager.ModuleList[msg.Platform]
 	for _, module := range moduleList{
 		if module.Name == msg.Module {
-			return module.queue.Put(msg);
+			logger.Logger.Tracef("AddMessageQueue url=%s", msg.Url)
+			module.Queue.Enqueue(msg);
+			return true
 		}
 	}
 	return false

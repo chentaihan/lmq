@@ -6,6 +6,8 @@ import (
 	"lmq/util"
 	"lmq/api/router"
 	"lmq/lmq"
+	"fmt"
+	"lmq/event"
 )
 
 type moduleRouter struct {
@@ -18,7 +20,6 @@ func NewModuleRouter() router.Router {
 	return r
 }
 
-// Routes returns the available routers to the checkpoint controller
 func (r *moduleRouter) Routes() []router.Route {
 	return r.routes
 }
@@ -39,6 +40,10 @@ func AddModule(w http.ResponseWriter, req *http.Request) {
 	var errno int
 	var retCode int
 	if ok {
+		if module := lmq.GetModule(platform, moduleName); module != nil {
+			queueName := fmt.Sprintf("%s_%s", platform, moduleName)
+			event.AddQueue(queueName, module.Queue)
+		}
 		retCode = http.StatusOK
 		errno = util.HTTP_SUCCESS
 	}else{
@@ -59,6 +64,8 @@ func DeleteModule(w http.ResponseWriter, req *http.Request) {
 	var errno int
 	var retCode int
 	if ok {
+		queueName := fmt.Sprintf("%s_%s", platform, moduleName)
+		event.SendSignal(queueName, event.EVENT_TYPE_DELETE_QUEUE)
 		retCode = http.StatusOK
 		errno = util.HTTP_SUCCESS
 	}else{
