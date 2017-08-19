@@ -81,7 +81,7 @@ func startEventItem(queueName string, eventItem *EventItem){
 					if msgQueue != nil{
 						for i := 0; i < len(msgQueue); i++ {
 							msg,_ := msgQueue[i].(*lmq.Message)
-							msg.Execute()
+							run(msg);
 						}
 					}
 				}
@@ -96,6 +96,27 @@ func startEventItem(queueName string, eventItem *EventItem){
 			}
 		}
 	}()
+}
+
+func run(msg *lmq.Message){
+	if module := lmq.GetModule(msg.Platform, msg.Platform); module != nil{
+		if module.TryCount < 0 {
+			for{
+				if _,err := msg.Execute(); err == nil{
+					break;
+				}
+				time.Sleep(time.Millisecond * 100)
+			}
+		}else{
+			for i := module.TryCount; i >= 0; i--{
+				if _,err := msg.Execute(); err == nil{
+					break;
+				}
+				time.Sleep(time.Millisecond * 100)
+			}
+		}
+	}
+
 }
 
 func SendSignal(queueName string, signal int) bool{

@@ -47,7 +47,7 @@ func HttpPostJson(uri, inputParam string) (string,error) {
         return "", err
     }
     bodystr := string(body)
-    if res.StatusCode == 200 {
+    if res.StatusCode >= 200 && res.StatusCode < 300 {
         logger.Logger.Tracef("HttpPostJson success url=%s, ret=%s",uri, bodystr)
         return bodystr, nil
     } else {

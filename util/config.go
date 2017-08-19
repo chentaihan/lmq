@@ -2,31 +2,32 @@ package util
 
 import (
 	"github.com/BurntSushi/toml"
-	"io/ioutil"
+	"lmq/util/logger"
+)
+
+const(
+	LmqConf = "./conf/lmq.conf"
 )
 
 type Config struct{
-
+	Serve struct{
+		HttpPort int
+	}
 }
 
-const(
-	PlatformConf = "./conf/platform.conf"
-	MessageConf = "./conf/message.conf"
-)
 var LmqConfig Config
 
-func LoadConfig(configFile string) error {
-	if _, err := toml.DecodeFile(configFile, &LmqConfig); err != nil {
+func LoadConfig() error {
+	if _, err := toml.DecodeFile(LmqConf, &LmqConfig); err != nil {
 		return  err
 	}
 	return nil
 }
 
-func LoadJson(jsonFile string) []byte{
-	if byte, err := ioutil.ReadFile(jsonFile); err == nil{
-		return byte
+func ConfigTest(){
+	if isok := LoadConfig();isok != nil{
+		logger.Logger.Tracef("loadConfig err=%s", isok)
 	}
-	return nil
+	logger.Logger.Tracef("httpPort:%d",LmqConfig.Serve.HttpPort);
 }
-
 

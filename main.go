@@ -10,16 +10,22 @@ import (
 	"lmq/util/logger"
 	"lmq/event"
 	"lmq/container"
+	"lmq/util"
 )
 
 func main() {
+	util.LoadConfig()
 	db.InitDB();
 	lmq.InitModule()
 	logger.Logger.Trace("init success ...")
 	startWorker()
 	server := api.NewServer()
 	server.InitRouter()
-	http.ListenAndServe(":8001", server.Router)
+	httpPort := util.LmqConfig.Serve.HttpPort
+	if httpPort <= 1024 {
+		httpPort = 9527
+	}
+	http.ListenAndServe(fmt.Sprintf(":%d", httpPort), server.Router)
 	logger.Logger.Trace("server start OK")
 }
 

@@ -13,6 +13,7 @@ type Module struct{
 	Platform string
 	Name     string
 	Queue    *container.CQueue
+	TryCount int	//失败重试次数，默认无限次重试
 }
 
 var moduleManager ModuleManager
@@ -33,11 +34,9 @@ func loadModule(){
 	for _, platform := range platformManager.PlatformList{
 		pform,_ := platform.(string)
 		filePath := GetPlatformPath(pform)
-		fmt.Println(filePath);
 		list := make([]*Module,0)
 		if conf ,_ := util.ReadFile(filePath); len(conf) > 0 {
 			json.Unmarshal(conf, &list)
-			fmt.Println(string(conf));
 		}
 		moduleManager.ModuleList[pform] = list
 	}
@@ -51,7 +50,7 @@ func AddModule(platform, module string) bool{
 		moduleManager.ModuleList[platform] = make([]*Module,0)
 	}
 	if !ExistModule(platform,module){
-		item := &Module{Platform:platform, Name:module, Queue:container.NewCQueue()}
+		item := &Module{Platform:platform, Name:module, Queue:container.NewCQueue(), TryCount:-1}
 		moduleManager.ModuleList[platform] = append(moduleManager.ModuleList[platform],item)
 		return SaveModule(platform, moduleManager.ModuleList[platform])
 	}
