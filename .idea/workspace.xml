@@ -2,47 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0f1dcd78-39c7-4751-842a-830cc911705f" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/GOPATH__lmq_.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/router/local.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/router/router.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/server.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/server/errors.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/server/home.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/server/message.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/server/module.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/server/platform.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/api/server/response.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/conf/lmq.conf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/conf/log.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/container/array.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/container/cqueue.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/container/list.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/container/map.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/container/queue.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/container/stringBuilder.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/container/syncMap.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/db.conf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/index_0.fdx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/message_0.rdb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/db/Message.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/db/dbconfig.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/db/index.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/db/init.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/event/eventCenter.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lmq.exe" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lmq/message.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lmq/module.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lmq/platform.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/main.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/util/FileHelper.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/util/config.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/util/constParam.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/util/http.go" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/util/logger/seelog.go" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lmq.iml" afterPath="$PROJECT_DIR$/lmq.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <ignored path="lmq.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -86,14 +47,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="36">
-              <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+              <caret line="2" column="7" lean-forward="false" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
               <folding>
                 <element signature="e#14#122#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="198">
+                <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+                <folding />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -163,13 +137,13 @@
         <option value="$PROJECT_DIR$/conf/lockLog.xml" />
         <option value="$PROJECT_DIR$/conf/dbLog.xml" />
         <option value="$PROJECT_DIR$/conf/log.xml" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/util/logger/seelog.go" />
         <option value="$PROJECT_DIR$/lmq/module.go" />
         <option value="$PROJECT_DIR$/event/eventCenter.go" />
         <option value="$PROJECT_DIR$/data/message_0.rdb" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/main.go" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -727,12 +701,12 @@
       <workItem from="1501296816949" duration="24493000" />
       <workItem from="1501406709218" duration="2608000" />
       <workItem from="1503108240391" duration="12742000" />
-      <workItem from="1511750385229" duration="1075000" />
+      <workItem from="1511750385229" duration="2159000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="175855000" />
+    <option name="totallyTimeSpent" value="176939000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -953,14 +927,6 @@
     <entry file="file://$PROJECT_DIR$/../github.com/cihub/seelog/cfg_config.go" />
     <entry file="file://$PROJECT_DIR$/conf/lockLog.xml" />
     <entry file="file://$PROJECT_DIR$/../github.com/cihub/seelog/logger.go" />
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="17" column="22" lean-forward="false" selection-start-line="17" selection-start-column="22" selection-end-line="17" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/conf/log.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -1090,10 +1056,27 @@
     <entry file="file://$PROJECT_DIR$/src/main.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="36">
-          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+          <caret line="2" column="7" lean-forward="false" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
           <folding>
             <element signature="e#14#122#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="198">
+            <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="17" column="22" lean-forward="false" selection-start-line="17" selection-start-column="22" selection-end-line="17" selection-end-column="22" />
+          <folding />
         </state>
       </provider>
     </entry>
