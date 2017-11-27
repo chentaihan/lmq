@@ -1,4 +1,4 @@
 .idea/*
-log/*
-data/platform/*
-lmq.exe
+src/log/*
+src/data/*
+bin/*
